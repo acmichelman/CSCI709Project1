@@ -1,11 +1,11 @@
 public class finderMap {
 
     /**
-     . = unexplored space
-     C = your current location
-     # = wall/ block that you need to go around
-     S = start position
-     E = end position
+     p = unexplored space
+      = your current location
+     x = wall/ block that you need to go around
+     # = start position
+     ! = end position
 
     +---+---+---+---+---+
     | S |   | ■ |   |   |
@@ -20,15 +20,15 @@ public class finderMap {
     +---+---+---+---+---+
      
     **/
-    private char[][] maze = {
-        {'S', '.', '#', '.', '.'},
-        {'#', '.', '#', '.', '#'},
-        {'.', '.', '.', '.', '#'},
-        {'.', '#', '#', '.', '.'},
-        {'.', '.', '.', '#', 'E'}
+    private char[][] map = {
+        {'#', 'p', 'x', 'p', 'p'},
+        {'x', 'p', 'x', 'p', 'x'},
+        {'p', 'p', 'p', 'p', 'x'},
+        {'p', 'x', 'x', 'p', 'x'},
+        {'p', 'p', 'p', 'x', '!'}
     };
 
-    private boolean[][] mazeExplored = {
+    private boolean[][] mapExplored = {
         {true, false, false, false, false},
         {false, false, false, false, false},
         {false, false, false, false, false},
@@ -36,7 +36,9 @@ public class finderMap {
         {false, false, false, false, false}
     };
 
-    public finderMap(String mazeString) {
+        //  constructor
+        //String "# p x p p \n x p x p x \n p p p p x \n p x x p p \n p p p x !"
+    public finderMap(String map) {
 
     }
 
