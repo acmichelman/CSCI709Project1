@@ -28,6 +28,14 @@ public class finderMap {
         {'.', '.', '.', '#', 'E'}
     };
 
+    private boolean[][] mazeExplored = {
+        {true, false, false, false, false},
+        {false, false, false, false, false},
+        {false, false, false, false, false},
+        {false, false, false, false, false},
+        {false, false, false, false, false}
+    };
+
     public finderMap(String mazeString) {
 
     }
