@@ -57,9 +57,7 @@ public class finderMap {
 
             //  Edge case checker seeing if any invalid characters entered
             if (current != '#' && current != '!' && current != 'p' && current != 'x' && current != '\n') {
-
-                System.out.println("Invalid entry: Inputed String must only contain #, !, p, x, \\n \n Invalid input: " + current);
-                
+                System.out.println("Invalid entry: Inputed String must only contain #, !, p, x, \\n \n Invalid input: " + current); 
             }
         }
 
@@ -82,9 +80,28 @@ public class finderMap {
         }
     }
 
+    //  used to check if pos x, y is a wall or not
+    public boolean getPath(int x, int y) {
+        if(this.map[x][y] == 'x') {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //  Getter (if square has been walked on)
+    public boolean getVisited(int x, int y) {
+        return this.mapExplored[x][y];
+    }
+
+    //  Setter (setting it to walked on)
+    public boolean setVisited(int x, int y) {
+        return this.mapExplored[x][y] = true;
+    }
+
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
-        String maze = "# a x z p \n x p x p x \n p p p p x \n p x x p p \n p p p x !";//    test str
+        String maze = "# p x p p \n x p x p x \n p p p p x \n p x x p p \n p p p x !";//    test str
         finderMap testMap = new finderMap(maze);
 
         System.out.println(Arrays.deepToString(testMap.map)); //test findermap
