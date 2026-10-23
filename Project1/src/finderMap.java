@@ -4,6 +4,7 @@ public class finderMap {
 
     /**
      p = unexplored space
+     v = explored space
       = your current location
      x = wall/ block that you need to go around
      # = start position
@@ -97,6 +98,22 @@ public class finderMap {
     //  Setter (setting it to walked on)
     public boolean setVisited(int x, int y) {
         return this.mapExplored[x][y] = true;
+    }
+
+    //  gets current state of the map including where we have visited or have not
+    public String getString() {
+        StringBuilder currentMap = new StringBuilder();
+        for(int row = 0; row < this.map.length; row++) {
+            for(int col = 0; col < this.map[row].length; col++) {
+                if(this.mapExplored[row][col] == true) {
+                    currentMap.append('v');
+                } else {
+                    currentMap.append(map[row][col]);
+                }
+            }
+            currentMap.append('\n');
+        }
+        return String.valueOf(currentMap);
     }
 
     public static void main(String[] args) throws Exception {
