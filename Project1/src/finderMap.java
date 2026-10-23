@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class createMap {
+public class finderMap {
 
     /**
      p = unexplored space
@@ -47,10 +47,21 @@ public class createMap {
         //  Constructor
         //  String "# p x p p \n x p x p x \n p p p p x \n p x x p p \n p p p x !"
         //  length 29
-    public createMap(String map) {
+    public finderMap(String map) {
         //  First scrub the input so all lower and no spaces
         map = map.toLowerCase();
         map = map.replace(" ", "");
+
+        for (int i = 0; i < map.length(); i++) {
+            char current = map.charAt(i);
+
+            //  Edge case checker seeing if any invalid characters entered
+            if (current != '#' && current != '!' && current != 'p' && current != 'x' && current != '\n') {
+
+                System.out.println("Invalid entry: Inputed String must only contain #, !, p, x, \\n \n Invalid input: " + current);
+                
+            }
+        }
 
         //  find array size and set it
         int size = map.length();
@@ -73,8 +84,8 @@ public class createMap {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
-        String maze = "# p x p p \n x p x p x \n p p p p x \n p x x p p \n p p p x !";//    test str
-        createMap testMap = new createMap(maze);
+        String maze = "# a x z p \n x p x p x \n p p p p x \n p x x p p \n p p p x !";//    test str
+        finderMap testMap = new finderMap(maze);
 
         System.out.println(Arrays.deepToString(testMap.map)); //test findermap
     }
