@@ -1,4 +1,6 @@
-public class finderMap {
+import java.util.Arrays;
+
+public class createMap {
 
     /**
      p = unexplored space
@@ -20,6 +22,8 @@ public class finderMap {
     +---+---+---+---+---+
      
     **/
+   /** 
+    * //    hard coded map
     private char[][] map = {
         {'#', 'p', 'x', 'p', 'p'},
         {'x', 'p', 'x', 'p', 'x'},
@@ -27,22 +31,51 @@ public class finderMap {
         {'p', 'x', 'x', 'p', 'x'},
         {'p', 'p', 'p', 'x', '!'}
     };
-
+    //  hard coded explored
     private boolean[][] mapExplored = {
-        {true, false, false, false, false},
+        {false, false, false, false, false},
         {false, false, false, false, false},
         {false, false, false, false, false},
         {false, false, false, false, false},
         {false, false, false, false, false}
     };
+    **/
+    private char[][] map;
+    private boolean [][] mapExplored;
 
-        //  constructor
-        //String "# p x p p \n x p x p x \n p p p p x \n p x x p p \n p p p x !"
-    public finderMap(String map) {
 
+        //  Constructor
+        //  String "# p x p p \n x p x p x \n p p p p x \n p x x p p \n p p p x !"
+        //  length 29
+    public createMap(String map) {
+        //  First scrub the input so all lower and no spaces
+        map = map.toLowerCase();
+        map = map.replace(" ", "");
+
+        //  find array size and set it
+        int size = map.length();
+        double sqrRoot = Math.sqrt(size);
+        size =  Integer.valueOf((int) sqrRoot);
+        this.map = new char[size][size];
+
+        int row = 0, col = 0;
+        //  looks through map and sets values at correct points in new created map
+        for(int i = 0; i < map.length(); i++) {
+            if(map.charAt(i) != '\n') { //  When we see new line instead increment row
+                this.map[row][col] = map.charAt(i);
+                col++;
+            } else {
+                col = 0;
+                row++;
+            }
+        }
     }
 
     public static void main(String[] args) throws Exception {
         System.out.println("Hello, World!");
+        String maze = "# p x p p \n x p x p x \n p p p p x \n p x x p p \n p p p x !";//    test str
+        createMap testMap = new createMap(maze);
+
+        System.out.println(Arrays.deepToString(testMap.map)); //test findermap
     }
 }
