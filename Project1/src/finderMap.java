@@ -1,5 +1,16 @@
 import java.util.Arrays;
 
+/**
+ * Goal Set 1: Build the data structure
+ * This program takes a map as a cml argument and creates two 2D array arrays
+ * One to store the paths, walls, start, and end (what can be visited)
+ * Another to store wether or not a location has been visited
+ * finderMap
+ * 
+ * @author Alex Michelman
+ * @version 1.0
+ */
+
 public class finderMap {
 
     /**
@@ -67,7 +78,7 @@ public class finderMap {
             }
         }
 
-        //  looping through row/col and setting a entire row (those seperated by \n) to that row position in our new map
+        //  populate map: loop through row/col and set values in our array
         for(int row = 0; row < rows.length; row++){
             for(int col = 0; col < rows[0].length(); col++) {
                 char curr = rows[row].charAt(col);
@@ -119,7 +130,7 @@ public class finderMap {
 
     public static void main(String[] args) throws Exception {
         String maze = "x!xxxxx\nxpxppp#\nxpppxxx\nxxxxxxx";
-
+    
         finderMap testMap = new finderMap(maze);
 
         //  print original map
@@ -129,7 +140,7 @@ public class finderMap {
         //  test setVisited (pathway)
         System.out.println("Visit pathway: " + testMap.setVisited(1, 1));
 
-        //  test testVisited (wall)
+        //  test setVisited (wall)
         System.out.println("Visit wall: " + testMap.setVisited(0, 0));
 
         //  test getVisted 
