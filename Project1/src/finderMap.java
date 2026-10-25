@@ -2,15 +2,15 @@ import java.util.Arrays;
 
 /**
  * Goal Set 1: Build the data structure
- * This program takes a map as a cml argument and creates two 2D array arrays
+ * This program takes a string of chars representing a map and creates two 2D-arrays
  * One to store the paths, walls, start, and end (what can be visited)
  * Another to store wether or not a location has been visited
  * finderMap
  * 
- * @author Alex Michelman
+ * @author Alex Michelman (Code)
+ * @author Tess Ramsey (Documentation)
  * @version 1.0
  */
-
 public class finderMap {
 
     /**
@@ -55,8 +55,10 @@ public class finderMap {
     private char[][] map; //    This is what the map looks like with start, end, walls, unexplored
     private boolean [][] mapExplored; //    This is a new map keeping track where we have explored
 
-
-    //  Constructor (takes a inputed string and maps it to a 2d array)
+    /**
+     * Constructor (takes a inputed string and maps it to a 2d array)
+     * @param map // string of chars representing a grid, each row ends in \n
+     */
     public finderMap(String map) {
         //  First scrub the input so all lower and no spaces
         map = map.toLowerCase();
@@ -87,8 +89,14 @@ public class finderMap {
         }
     }
 
-    //  used to check if pos x, y is a wall or not
+    /**
+     * Checks if (x, y) coord is a path or not
+     * @param x // x coord
+     * @param y // y coord
+     * @return // true if path
+     */
     public boolean getPath(int x, int y) {
+        // "x" is a wall
         if(this.map[x][y] == 'x') {
             return false;
         } else {
@@ -96,12 +104,22 @@ public class finderMap {
         }
     }
 
-    //  Getter (if square has been walked on)
+    /**
+     * Checks if an (x, y) coord has been visisted
+     * @param x // x coord
+     * @param y // y coord
+     * @return // true if visited
+     */
     public boolean getVisited(int x, int y) {
         return this.mapExplored[x][y];
     }
 
-    //  Setter (setting mapExplored to walked on if there isnt a wall on position)
+    /**
+     * Sets (x, y) coord of mapExplored to true when visited
+     * @param x // x coord
+     * @param y // y coord
+     * @return // true if can be visited
+     */
     public boolean setVisited(int x, int y) {
         if(getPath(x, y) == true){
             this.mapExplored[x][y] = true;
@@ -112,7 +130,10 @@ public class finderMap {
         
     }
 
-    //  gets current state of the map including where we have visited or have not
+    /**
+     * Gets current state of our map, marking off visited locations as 'v'
+     * @return // a string representing the values in our current map
+     */
     public String getString() {
         StringBuilder currentMap = new StringBuilder();
         for(int row = 0; row < this.map.length; row++) {
@@ -128,6 +149,11 @@ public class finderMap {
         return String.valueOf(currentMap);
     }
 
+    /**
+     * Main method currently used for testing map data
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         String maze = "x!xxxxx\nxpxppp#\nxpppxxx\nxxxxxxx";
     
