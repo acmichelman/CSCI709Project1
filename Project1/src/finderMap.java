@@ -1,5 +1,9 @@
 import java.util.Arrays;
 
+import java.io.File;                  // Import the File class
+import java.io.FileNotFoundException; // Import this class to handle errors
+import java.util.Scanner;             // Import the Scanner class to read text files
+
 /**
  * Goal Set 1: Build the data structure
  * This program takes a string of chars representing a map and creates two 2D-arrays
@@ -155,9 +159,28 @@ public class finderMap {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        String maze = "x!xxxxx\nxpxppp#\nxpppxxx\nxxxxxxx";
-    
-        finderMap testMap = new finderMap(maze);
+        System.out.println("Working directory: " + System.getProperty("user.dir"));
+        File myObj = new File("Project1/src/datafile.txt");
+        StringBuilder maze = new StringBuilder();
+
+        // try-with-resources: Scanner will be closed automatically
+        try (Scanner myReader = new Scanner(myObj)) {
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            System.out.println(data);
+            
+            // Add each line to the maze String
+            maze.append(data);
+            maze.append("\n");
+        }
+        } catch (FileNotFoundException e) {
+        System.out.println("An error occurred.");
+        e.printStackTrace();
+        }
+        
+        //String maze = "x!xxxxx\nxpxppp#\nxpppxxx\nxxxxxxx";
+         
+        finderMap testMap = new finderMap(maze.toString());
 
         //  print original map
         System.out.println("Original Map:");
@@ -174,5 +197,7 @@ public class finderMap {
 
         System.out.println("Updated Map:");
         System.out.println(testMap.getString());
+
+        
     }
 }
