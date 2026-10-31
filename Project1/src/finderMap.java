@@ -169,7 +169,7 @@ public class finderMap {
             String data = myReader.nextLine();
             System.out.println(data);
             
-            // Add each line to the maze String
+            //  this will add a /n after each line read in .txt file  
             maze.append(data);
             maze.append("\n");
             }
