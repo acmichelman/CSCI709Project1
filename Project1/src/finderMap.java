@@ -153,6 +153,11 @@ public class finderMap {
         return String.valueOf(currentMap);
     }
 
+    //  Flood fill method
+    public static void navigation() {
+
+    }
+
     /**
      * Main method currently used for testing map data
      * @param args
@@ -160,7 +165,7 @@ public class finderMap {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("datafile.txt");
+        File myObj = new File("Project1/src/datafile.txt");
         StringBuilder maze = new StringBuilder();
 
         // try-with-resources: Scanner will be closed automatically
