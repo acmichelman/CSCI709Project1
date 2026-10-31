@@ -160,7 +160,7 @@ public class finderMap {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("Project1/src/datafile.txt");
+        File myObj = new File("datafile.txt");
         StringBuilder maze = new StringBuilder();
 
         // try-with-resources: Scanner will be closed automatically
@@ -172,18 +172,16 @@ public class finderMap {
             // Add each line to the maze String
             maze.append(data);
             maze.append("\n");
-        }
+            }
         } catch (FileNotFoundException e) {
-        System.out.println("An error occurred.");
-        e.printStackTrace();
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
-        
-        //String maze = "x!xxxxx\nxpxppp#\nxpppxxx\nxxxxxxx";
          
         finderMap testMap = new finderMap(maze.toString());
 
         //  print original map
-        System.out.println("Original Map:");
+        System.out.println("\nOriginal Map:");
         System.out.println(testMap.getString());
 
         //  test setVisited (pathway)
