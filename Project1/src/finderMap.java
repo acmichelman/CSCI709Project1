@@ -153,9 +153,42 @@ public class finderMap {
         return String.valueOf(currentMap);
     }
 
-    //  Flood fill method
-    public static void navigation() {
+    /**
+     * Flood fills the map
+     * @param x // x coord
+     * @param y // y coord
+     */
+    public void floodFill(int x, int y) {
+        // check if out of bound of our maps
+        if (x < 0 || x >= this.map.length || y < 0 || y >= this.map[0].length) {
+        return;
+        }
 
+        // return if a wall
+        if (!getPath(x, y)) {
+        return;
+        }
+        
+        // return if already visited
+        if (getVisited(x, y)) {
+            return;
+        }
+
+        // mark visited
+        setVisited(x, y);
+
+        // copied from Edgar's in-class example
+        // fill up
+		floodFill(x - 1, y);
+
+		// fill down
+		floodFill(x + 1, y);
+
+		// fill left
+		floodFill(x, y - 1);
+
+		// fill right
+		floodFill(x, y + 1);
     }
 
     /**
@@ -186,21 +219,15 @@ public class finderMap {
         finderMap testMap = new finderMap(maze.toString());
 
         //  print original map
-        System.out.println("\nOriginal Map:");
+        System.out.println("\nUnsolved Map:");
         System.out.println(testMap.getString());
 
-        //  test setVisited (pathway)
-        System.out.println("Visit pathway: " + testMap.setVisited(1, 1));
+        // System.out.println("Updated Map:");
+        // System.out.println(testMap.getString());
 
-        //  test setVisited (wall)
-        System.out.println("Visit wall: " + testMap.setVisited(0, 0));
-
-        //  test getVisted 
-        System.out.println("Was visited: " + testMap.getVisited(1, 1));
-
-        System.out.println("Updated Map:");
+        // Starting at '#' (row 1, col 1)
+        testMap.floodFill(1, 1);
+        System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
-
-        
     }
 }
