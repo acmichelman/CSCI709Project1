@@ -228,5 +228,6 @@ public class finderMap {
         testMap.floodFill(1, 1);
         System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
+        
     }
 }
