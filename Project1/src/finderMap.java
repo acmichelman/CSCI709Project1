@@ -161,12 +161,12 @@ public class finderMap {
     public void floodFill(int x, int y) {
         // check if out of bound of our maps
         if (x < 0 || x >= this.map.length || y < 0 || y >= this.map[0].length) {
-        return;
+            return;
         }
 
         // return if a wall
         if (!getPath(x, y)) {
-        return;
+            return;
         }
         
         // return if already visited
@@ -177,7 +177,6 @@ public class finderMap {
         // mark visited
         setVisited(x, y);
 
-        // copied from Edgar's in-class example
         // fill up
 		floodFill(x - 1, y);
 
