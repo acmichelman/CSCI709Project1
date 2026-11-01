@@ -154,13 +154,50 @@ public class finderMap {
     }
 
     /**
+     * Flood fills the map
+     * @param x // x coord
+     * @param y // y coord
+     */
+    public void floodFill(int x, int y) {
+        // check if out of bound of our maps
+        if (x < 0 || x >= this.map.length || y < 0 || y >= this.map[0].length) {
+            return;
+        }
+
+        // return if a wall
+        if (!getPath(x, y)) {
+            return;
+        }
+        
+        // return if already visited
+        if (getVisited(x, y)) {
+            return;
+        }
+
+        // mark visited
+        setVisited(x, y);
+
+        // fill up
+		floodFill(x - 1, y);
+
+		// fill down
+		floodFill(x + 1, y);
+
+		// fill left
+		floodFill(x, y - 1);
+
+		// fill right
+		floodFill(x, y + 1);
+    }
+
+    /**
      * Main method currently used for testing map data
      * @param args
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("datafile.txt");
+        File myObj = new File("Project1/src/datafile.txt");
         StringBuilder maze = new StringBuilder();
 
         // try-with-resources: Scanner will be closed automatically
@@ -172,32 +209,24 @@ public class finderMap {
             //  this will add a /n after each line read in .txt file  
             maze.append(data);
             maze.append("\n");
-        }
+            }
         } catch (FileNotFoundException e) {
-        System.out.println("An error occurred.");
-        e.printStackTrace();
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
-        
-        //String maze = "x!xxxxx\nxpxppp#\nxpppxxx\nxxxxxxx";
          
         finderMap testMap = new finderMap(maze.toString());
 
         //  print original map
-        System.out.println("Original Map:");
+        System.out.println("\nUnsolved Map:");
         System.out.println(testMap.getString());
 
-        //  test setVisited (pathway)
-        System.out.println("Visit pathway: " + testMap.setVisited(1, 1));
+        // System.out.println("Updated Map:");
+        // System.out.println(testMap.getString());
 
-        //  test setVisited (wall)
-        System.out.println("Visit wall: " + testMap.setVisited(0, 0));
-
-        //  test getVisted 
-        System.out.println("Was visited: " + testMap.getVisited(1, 1));
-
-        System.out.println("Updated Map:");
+        // Starting at '#' (row 1, col 1)
+        testMap.floodFill(1, 1);
+        System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
-
-        
     }
 }
