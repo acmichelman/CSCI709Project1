@@ -114,7 +114,7 @@ public class finderMap {
      * @param y // y coord
      * @return // true if visited
      */
-    public boolean getVisited(int x, int y) {
+    public boolean getVisited(int x, int y) { // TODO int getVisited(int x, int y)
         return this.mapExplored[x][y];
     }
 
@@ -124,8 +124,8 @@ public class finderMap {
      * @param y // y coord
      * @return // true if can be visited
      */
-    public boolean setVisited(int x, int y) {
-        if(getPath(x, y) == true){
+    public boolean setVisited(int x, int y) { // TODO boolean setVisited(X, Y, visitNum )
+        if(getPath(x, y) == true){// TODO must set int instead of bool, int is current cost of movement 
             this.mapExplored[x][y] = true;
             return true;
         } else {
@@ -158,7 +158,7 @@ public class finderMap {
      * @param x // x coord
      * @param y // y coord
      */
-    public void floodFill(int x, int y) {
+    public void floodFill(int x, int y) { //int currCost
         // check if out of bound of our maps
         if (x < 0 || x >= this.map.length || y < 0 || y >= this.map[0].length) {
             return;
@@ -178,16 +178,19 @@ public class finderMap {
         setVisited(x, y);
 
         // fill up
-		floodFill(x - 1, y);
+		floodFill(x - 1, y); //getCost(currCost)
 
 		// fill down
-		floodFill(x + 1, y);
+		floodFill(x + 1, y);//getCost(currCost)
 
 		// fill left
-		floodFill(x, y - 1);
+		floodFill(x, y - 1);//getCost(currCost)
 
 		// fill right
-		floodFill(x, y + 1);
+		floodFill(x, y + 1);//getCost(currCost)
+
+        // cost = cost + currcost 
+        //setvariable(currCost)
     }
 
     /**
@@ -228,6 +231,13 @@ public class finderMap {
         testMap.floodFill(1, 1);
         System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
-        
+
     }
 }
+
+
+//  Cost is arbetary number we set?
+//  what is visitNum in boolean setVisited(x, y, visitNum)
+//  which knightsTour file are we looking at
+//  WHAT IS THE END OUTPUT at this point
+//
