@@ -64,6 +64,7 @@ public class finderMap {
      * @param map // string of chars representing a grid, each row ends in \n
      */
     public finderMap(String map) {
+        int cost = 0; //    This will gain ost of movement
         //  First scrub the input so all lower and no spaces
         map = map.toLowerCase();
         map = map.replace(" ", "");
@@ -79,8 +80,10 @@ public class finderMap {
         for (int i = 0; i < map.length(); i++) {
             char current = map.charAt(i);
             //  Edge case checker seeing if any invalid characters entered
-            if (current != '#' && current != '!' && current != 'p' && current != 'x' && current != '\n') {
-                System.out.println("Invalid entry: Inputed String must only contain #, !, p, x, \\n \n Invalid input: " + current); 
+            if (current != '#' && current != '!' && current != 'p' && current != 'x' && current != '\n' && //TODO should make this look better
+                current != '0' && current != '1' && current != '2' && current != '3' && current != '4' &&
+                current != '5' && current != '6' && current != '7' && current != '8' && current != '9') {
+                System.out.println("Invalid entry: Inputed String must only contain #, !, p, x, and a number \\n \n Invalid input: " + current); 
             }
         }
 
@@ -89,8 +92,13 @@ public class finderMap {
             for(int col = 0; col < rows[0].length(); col++) {
                 char curr = rows[row].charAt(col);
                 this.map[row][col] = curr;
+                if (curr == '0' || curr == '1' || curr == '2' || curr == '3' || curr == '4' ||
+                    curr == '5' || curr == '6' || curr == '7' || curr == '8' || curr == '9') {
+                    cost = cost + getCost(row, col);
+                }
             } 
         }
+        System.out.println(cost);
     }
 
     /**
@@ -191,6 +199,12 @@ public class finderMap {
 
         // cost = cost + currcost 
         //setvariable(currCost)
+    }
+
+    public int getCost(int x, int y) {
+        char temp = this.map[x][y];
+        int cost = temp - '0';
+        return cost;
     }
 
     /**
