@@ -16,57 +16,19 @@ import java.util.Scanner;             // Import the Scanner class to read text f
  * @version 1.0
  */
 public class finderMap {
-
-    /**
-     p = unexplored space
-     x = wall/ block that you need to go around
-     # = start position
-     ! = end position
-
-    +---+---+---+---+---+
-    | S |   | ■ |   |   |
-    +---+---+---+---+---+
-    | ■ |   | ■ |   | ■ |
-    +---+---+---+---+---+
-    |   |   |   |   | ■ |
-    +---+---+---+---+---+
-    |   | ■ | ■ |   |   |
-    +---+---+---+---+---+
-    |   |   |   |   | E |
-    +---+---+---+---+---+
-    //  String "# p x p p \n x p x p x \n p p p p x \n p x x p p \n p p p x !"
-    //  length 29
-    **/
-   /** 
-    * //    hard coded map
-    private char[][] map = {
-        {'#', 'p', 'x', 'p', 'p'},
-        {'x', 'p', 'x', 'p', 'x'},
-        {'p', 'p', 'p', 'p', 'x'},
-        {'p', 'x', 'x', 'p', 'x'},
-        {'p', 'p', 'p', 'x', '!'}
-    };
-    //  hard coded explored
-    private boolean[][] mapExplored = {
-        {false, false, false, false, false},
-        {false, false, false, false, false},
-        {false, false, false, false, false},
-        {false, false, false, false, false},
-        {false, false, false, false, false}
-    };
-    **/
    
     private char[][] map; //    This is what the map looks like with start, end, walls, unexplored
-    private boolean [][] mapExplored; //    This is a new map keeping track where we have explored
+    private int [][] mapExplored; //    This is a new map keeping track where we have explored
+    int stepsTakenFinal = 0; // count of steps taken to get to end
+    boolean STATE_hitEnd = false; //    used in map traversal so we stop once hitting the end
+    
 
     /**
      * Constructor (takes a inputed string and maps it to a 2d array)
      * @param map // string of chars representing a grid, each row ends in \n
      */
     public finderMap(String map) {
-        int cost = 0; //    This will gain ost of movement
         //  First scrub the input so all lower and no spaces
-        map = map.toLowerCase();
         map = map.replace(" ", "");
 
         //  seperate string into rows ()
@@ -74,7 +36,8 @@ public class finderMap {
 
         //  initialize both arrays
         this.map = new char[rows.length][rows[0].length()];
-        this.mapExplored = new boolean[rows.length][rows[0].length()];
+        this.mapExplored = new int[rows.length][rows[0].length()];
+        
 
         //  checks if all user inputs contain proper values
         for (int i = 0; i < map.length(); i++) {
@@ -82,7 +45,9 @@ public class finderMap {
             //  Edge case checker seeing if any invalid characters entered
             if (current != '#' && current != '!' && current != 'p' && current != 'x' && current != '\n' && //TODO should make this look better
                 current != '0' && current != '1' && current != '2' && current != '3' && current != '4' &&
-                current != '5' && current != '6' && current != '7' && current != '8' && current != '9') {
+                current != '5' && current != '6' && current != '7' && current != '8' && current != '9' &&
+                current != 'A' && current != 'B' && current != 'C' && current != 'D' && current != 'E' &&
+                current != 'F') {
                 System.out.println("Invalid entry: Inputed String must only contain #, !, p, x, and a number \\n \n Invalid input: " + current); 
             }
         }
@@ -92,13 +57,9 @@ public class finderMap {
             for(int col = 0; col < rows[0].length(); col++) {
                 char curr = rows[row].charAt(col);
                 this.map[row][col] = curr;
-                if (curr == '0' || curr == '1' || curr == '2' || curr == '3' || curr == '4' ||
-                    curr == '5' || curr == '6' || curr == '7' || curr == '8' || curr == '9') {
-                    cost = cost + getCost(row, col);
-                }
+                    
             } 
         }
-        System.out.println(cost);
     }
 
     /**
@@ -122,7 +83,7 @@ public class finderMap {
      * @param y // y coord
      * @return // true if visited
      */
-    public boolean getVisited(int x, int y) { // TODO int getVisited(int x, int y)
+    public int getVisited(int x, int y) { 
         return this.mapExplored[x][y];
     }
 
@@ -130,11 +91,12 @@ public class finderMap {
      * Sets (x, y) coord of mapExplored to true when visited
      * @param x // x coord
      * @param y // y coord
-     * @return // true if can be visited
+     * @param visitedNum // what step your at in your travle ()
+     * @return // true if has be visited
      */
-    public boolean setVisited(int x, int y) { // TODO boolean setVisited(X, Y, visitNum )
-        if(getPath(x, y) == true){// TODO must set int instead of bool, int is current cost of movement 
-            this.mapExplored[x][y] = true;
+    public boolean setVisited(int x, int y, int visitedNum) { 
+        if(getPath(x, y) == true){
+            this.mapExplored[x][y] = visitedNum + 1;
             return true;
         } else {
             return false;
@@ -147,16 +109,20 @@ public class finderMap {
      * @return // a string representing the values in our current map
      */
     public String getString() {
+        
         StringBuilder currentMap = new StringBuilder();
         for(int row = 0; row < this.map.length; row++) {
             for(int col = 0; col < this.map[row].length; col++) {
-                if(this.mapExplored[row][col] == true) { // We are using 'v' to indicate a visited space on new string
-                    currentMap.append('v');
+                
+                if(this.mapExplored[row][col] != 0) { // We are using 'v' to indicate a visited space on new string
+                    currentMap.append(mapExplored[row][col]);
+                    
                 } else {
-                    currentMap.append(map[row][col]); //if not visited just return current space
+                    currentMap.append('x'); //if not visited just return current space
                 }
             }
             currentMap.append('\n'); // after each row add '\n' to indent down to next col
+            
         }
         return String.valueOf(currentMap);
     }
@@ -165,46 +131,83 @@ public class finderMap {
      * Flood fills the map
      * @param x // x coord
      * @param y // y coord
+     * @return // t/f is program continues
      */
-    public void floodFill(int x, int y) { //int currCost
+    public boolean floodFill(int x, int y, int steps) { //int currCost
         // check if out of bound of our maps
         if (x < 0 || x >= this.map.length || y < 0 || y >= this.map[0].length) {
-            return;
+            return false;
         }
 
         // return if a wall
         if (!getPath(x, y)) {
-            return;
+            return false;
         }
         
         // return if already visited
-        if (getVisited(x, y)) {
-            return;
+        if (getVisited(x, y) != 0) {
+            return false;
         }
 
         // mark visited
-        setVisited(x, y);
+        setVisited(x, y, steps); 
+
+        //  testing getCost
+        System.out.println("Curr Cost at " + x + " : " + y + " = " + getCost(x, y));
 
         // fill up
-		floodFill(x - 1, y); //getCost(currCost)
+		if(floodFill(x - 1, y, steps + 1)) return true; 
 
 		// fill down
-		floodFill(x + 1, y);//getCost(currCost)
+		if(floodFill(x + 1, y, steps + 1)) return true;
 
 		// fill left
-		floodFill(x, y - 1);//getCost(currCost)
+		if(floodFill(x, y - 1, steps + 1)) return true;
 
 		// fill right
-		floodFill(x, y + 1);//getCost(currCost)
+		if(floodFill(x, y + 1, steps + 1)) return true;
 
-        // cost = cost + currcost 
-        //setvariable(currCost)
+        if(this.map[x][y] != '!' && STATE_hitEnd == false) { // We have a bool to check if it hits the end so it doesnt remove anything once at end
+            steps--;
+            this.mapExplored[x][y] = 0; //  This erases any space we backtraced
+        }
+        if(this.map[x][y] == '!') {
+            stepsTakenFinal = steps + 1; 
+            STATE_hitEnd = true;
+        }
+
+        return false;
     }
 
+    /**
+     * Gets cost in space the map
+     * @param x // x coord
+     * @param y // y coord
+     * @return // cost at current x, y cord
+     */
     public int getCost(int x, int y) {
+        if(this.map[x][y] == '!' || this.map[x][y] == '#') {
+            return 0;
+        }
         char temp = this.map[x][y];
-        int cost = temp - '0';
+        int cost = Integer.valueOf(String.valueOf(temp), 16);
         return cost;
+    }
+
+    //  Small helper method which will find '#' in dataFile.txt and set that as our starting point
+    public void mapTraversal() {
+    for (int row = 0; row < this.map.length; row++) {
+        for (int col = 0; col < this.map[row].length; col++) {
+            if (this.map[row][col] == '#') {
+
+                //  will call floodFill and start there
+                floodFill(row, col, 0);
+                System.out.println("STEPS TAKEN: " + stepsTakenFinal + "\n");
+                //  Stop search after finding start
+                return;
+                }
+            }
+        }
     }
 
     /**
@@ -214,7 +217,7 @@ public class finderMap {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("Project1/src/datafile.txt");
+        File myObj = new File("datafile.txt");
         StringBuilder maze = new StringBuilder();
 
         // try-with-resources: Scanner will be closed automatically
@@ -238,20 +241,10 @@ public class finderMap {
         System.out.println("\nUnsolved Map:");
         System.out.println(testMap.getString());
 
-        // System.out.println("Updated Map:");
-        // System.out.println(testMap.getString());
-
-        // Starting at '#' (row 1, col 1)
-        testMap.floodFill(1, 1);
+        //  Helper func which finds '#' to start program
+        testMap.mapTraversal(); //---------------------------WHERE PROGRAM BEGINS REALLY--------------------
         System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
 
     }
 }
-
-
-//  Cost is arbetary number we set?
-//  what is visitNum in boolean setVisited(x, y, visitNum)
-//  which knightsTour file are we looking at
-//  WHAT IS THE END OUTPUT at this point
-//
