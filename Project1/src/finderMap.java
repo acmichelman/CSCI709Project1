@@ -19,6 +19,7 @@ public class finderMap {
    
     private char[][] map; //    This is what the map looks like with start, end, walls, unexplored
     private int [][] mapExplored; //    This is a new map keeping track where we have explored
+    private int [][] mapStepsCost; //   Going to keep track of of our step cost in this map so algorithim doesnt need to change much.
     int stepsTakenFinal = 0; // count of steps taken to get to end
     boolean STATE_hitEnd = false; //    used in map traversal so we stop once hitting the end
     
@@ -37,6 +38,7 @@ public class finderMap {
         //  initialize both arrays
         this.map = new char[rows.length][rows[0].length()];
         this.mapExplored = new int[rows.length][rows[0].length()];
+        this.mapStepsCost = new int[rows.length][rows[0].length()];
         
 
         //  checks if all user inputs contain proper values
@@ -114,11 +116,16 @@ public class finderMap {
         for(int row = 0; row < this.map.length; row++) {
             for(int col = 0; col < this.map[row].length; col++) {
                 
-                if(this.mapExplored[row][col] != 0) { // We are using 'v' to indicate a visited space on new string
-                    currentMap.append(mapExplored[row][col]);
+                if(this.mapExplored[row][col] != 0) { // We are printing ascii value
+                    if(this.mapExplored[row][col] < 10 || this.mapExplored[row][col] > 0){
+                        currentMap.append(mapExplored[row][col]);
+                    } else {//  TODO convert 10-16 into A-F (int to ascii)
+
+                    }
+                    
                     
                 } else {
-                    currentMap.append('x'); //if not visited just return current space
+                    currentMap.append('x'); //if not visited just return x
                 }
             }
             currentMap.append('\n'); // after each row add '\n' to indent down to next col
@@ -217,7 +224,7 @@ public class finderMap {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("datafile.txt");
+        File myObj = new File("Project1/src/datafile.txt");
         StringBuilder maze = new StringBuilder();
 
         // try-with-resources: Scanner will be closed automatically
