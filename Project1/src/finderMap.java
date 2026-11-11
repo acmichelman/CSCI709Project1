@@ -98,16 +98,12 @@ public class finderMap {
      * @return // true if has be visited
      */
     public boolean setVisited(int x, int y, int visitedNum) { 
-        //if(mapExplored[x][y] == '!') {
-        //    return true;
-        //}
         if(getPath(x, y) == true){
             this.mapExplored[x][y] = visitedNum + 1;
             return true;
         } else {
             return false;
         }
-        
     }
 
     /**
@@ -138,9 +134,11 @@ public class finderMap {
      * Flood fills the map
      * @param x // x coord
      * @param y // y coord
+     * @param steps // recursing storing of steps from start to end
+     * @param prevCountCurrSum // storage of count sum at previous location
      * @return // t/f is program continues
      */
-    public boolean floodFill(int x, int y, int steps, int prevCount) { //int currCost
+    public boolean floodFill(int x, int y, int steps, int prevCountCurrSum) { //int currCost
         // check if out of bound of our maps
         if (x < 0 || x >= this.map.length || y < 0 || y >= this.map[0].length) {
             return false;
@@ -177,23 +175,23 @@ public class finderMap {
 
         // Adds previous count + curr position count and sets it in map to be stored
         // Using this map for counting cost for final lost cost rought
-        prevCount += getCost(x, y);
-        mapStepsCost[x][y] = prevCount;
+        prevCountCurrSum += getCost(x, y);
+        mapStepsCost[x][y] = prevCountCurrSum;
         System.out.println("Curr sum cost at pos X: " + x + " Y: " + y + " = " + mapStepsCost[x][y] + "\n"); // test count
 
         
 
         // fill up
-		if(floodFill(x - 1, y, steps + 1, prevCount)) return true; 
+		if(floodFill(x - 1, y, steps + 1, prevCountCurrSum)) return true; 
 
 		// fill down
-		if(floodFill(x + 1, y, steps + 1, prevCount)) return true;
+		if(floodFill(x + 1, y, steps + 1, prevCountCurrSum)) return true;
 
 		// fill left
-		if(floodFill(x, y - 1, steps + 1, prevCount)) return true;
+		if(floodFill(x, y - 1, steps + 1, prevCountCurrSum)) return true;
 
 		// fill right
-		if(floodFill(x, y + 1, steps + 1, prevCount)) return true;
+		if(floodFill(x, y + 1, steps + 1, prevCountCurrSum)) return true;
 
         if(this.map[x][y] != '!') { // use this to check for backtracing
             steps--;
