@@ -21,7 +21,8 @@ public class finderMap {
     private int [][] mapExplored; //    This is a new map keeping track where we have explored
     private int [][] mapStepsCost; //   Going to keep track of of our step cost in this map so algorithim doesnt need to change much.
     int endX, endY; //  Small helper for getString so we can set ! position to stepsTakenFinal (thus setting end to smallest rought count)
-    private String completedRoute; //   Collection of each way to finish maze
+    private StringBuilder completedRoute = new StringBuilder(); //   Collection of each way to finish maze [route][x pos][y pos]
+    private StringBuilder tempCompletedRoute = new StringBuilder(); // holds currently being worked on route that will have values being removed and added
     int stepsTakenFinal = 0; // count of steps taken to get to end
     
 
@@ -40,6 +41,7 @@ public class finderMap {
         this.map = new char[rows.length][rows[0].length()];
         this.mapExplored = new int[rows.length][rows[0].length()];
         this.mapStepsCost = new int[rows.length][rows[0].length()];
+        
         
 
         //  checks if all user inputs contain proper values
@@ -157,6 +159,11 @@ public class finderMap {
         // mark visited
         setVisited(x, y, steps); 
 
+        //  sets tempCompletedRoute
+        int previousLength = tempCompletedRoute.length(); //    used to remove values with setLength() method
+        tempCompletedRoute.append("(").append(x).append(",").append(y).append(") ");
+        System.out.println(tempCompletedRoute); //  test print route
+
         //  Checks if program hit end. 
         if(this.map[x][y] == '!') {
             System.out.println("Rought Found\nSteps: " + steps + "\n");
@@ -165,7 +172,8 @@ public class finderMap {
             if(stepsTakenFinal > steps || stepsTakenFinal == 0) {
                 stepsTakenFinal = steps;
             }
-            
+            completedRoute.append( "[" + tempCompletedRoute + "]");
+            System.out.println("Completed Route: " + completedRoute);
             //TODO this is where I will add final count to end.
             return false;
         }
@@ -195,6 +203,7 @@ public class finderMap {
 
         if(this.map[x][y] != '!') { // use this to check for backtracing
             steps--;
+            tempCompletedRoute.setLength(previousLength); //    removes last value in string builder
             return false;
         }
 
@@ -263,6 +272,7 @@ public class finderMap {
         testMap.mapTraversal(); //---------------------------WHERE PROGRAM BEGINS REALLY--------------------
         System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
+        
 
     }
 }
