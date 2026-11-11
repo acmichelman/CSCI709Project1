@@ -172,7 +172,7 @@ public class finderMap {
             if(stepsTakenFinal > steps || stepsTakenFinal == 0) {
                 stepsTakenFinal = steps;
             }
-            completedRoute.append( "[" + tempCompletedRoute + "]");
+            completedRoute.append( "Steps: " + steps + " [" + tempCompletedRoute + "] ");
             System.out.println("Completed Route: " + completedRoute);
             //TODO this is where I will add final count to end.
             return false;
