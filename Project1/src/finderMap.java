@@ -23,8 +23,7 @@ public class finderMap {
     private int [][] mapStepsCost; //   Going to keep track of of our step cost in this map so algorithim doesnt need to change much.
     int endX, endY; //  Small helper for getString so we can set ! position to stepsTakenFinal (thus setting end to smallest rought count)
     private ArrayList<ArrayList<String>> completedRoutes = new ArrayList<>(); //   Collection of each way to finish maze [route][x pos][y pos]
-    private int lowestCost = Integer.MAX_VALUE; 
-    private int lowestCostRouteIndex = -1; // Going to place lowest step total into front of array list
+    private int lowestCost = Integer.MAX_VALUE; //  used as a comparason to set lowest cost path to first position in completedRoutes
     private StringBuilder tempCompletedRoute = new StringBuilder(); // holds currently being worked on route that will have values being removed and added
     int stepsTakenFinal = 0; // count of steps taken to get to end
     
@@ -266,7 +265,7 @@ public class finderMap {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("Project1/src/datafile.txt");
+        File myObj = new File("datafile.txt");
         StringBuilder maze = new StringBuilder();
 
         // try-with-resources: Scanner will be closed automatically
