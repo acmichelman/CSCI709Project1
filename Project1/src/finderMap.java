@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import java.io.File;                  // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
@@ -15,12 +15,17 @@ import java.util.Scanner;             // Import the Scanner class to read text f
  * @author Tess Ramsey (Documentation)
  * @version 1.0
  */
+
 public class finderMap {
    
     private char[][] map; //    This is what the map looks like with start, end, walls, unexplored
     private int [][] mapExplored; //    This is a new map keeping track where we have explored
+    private int [][] mapStepsCost; //   Going to keep track of of our step cost in this map so algorithim doesnt need to change much.
+    int endX, endY; //  Small helper for getString so we can set ! position to stepsTakenFinal (thus setting end to smallest rought count)
+    private ArrayList<ArrayList<String>> completedRoutes = new ArrayList<>(); //   Collection of each way to finish maze [route][x pos][y pos]
+    private int lowestCost = Integer.MAX_VALUE; //  used as a comparason to set lowest cost path to first position in completedRoutes
+    private StringBuilder tempCompletedRoute = new StringBuilder(); // holds currently being worked on route that will have values being removed and added
     int stepsTakenFinal = 0; // count of steps taken to get to end
-    boolean STATE_hitEnd = false; //    used in map traversal so we stop once hitting the end
     
 
     /**
@@ -37,6 +42,9 @@ public class finderMap {
         //  initialize both arrays
         this.map = new char[rows.length][rows[0].length()];
         this.mapExplored = new int[rows.length][rows[0].length()];
+        this.mapStepsCost = new int[rows.length][rows[0].length()];
+        
+        
         
 
         //  checks if all user inputs contain proper values
@@ -101,7 +109,6 @@ public class finderMap {
         } else {
             return false;
         }
-        
     }
 
     /**
@@ -113,12 +120,13 @@ public class finderMap {
         StringBuilder currentMap = new StringBuilder();
         for(int row = 0; row < this.map.length; row++) {
             for(int col = 0; col < this.map[row].length; col++) {
-                
-                if(this.mapExplored[row][col] != 0) { // We are using 'v' to indicate a visited space on new string
+                if(row == endX && col == endY) {
+                    currentMap.append(stepsTakenFinal - 1);
+                } else if(this.mapExplored[row][col] != 0) { // We are printing ascii value
                     currentMap.append(mapExplored[row][col]);
-                    
+
                 } else {
-                    currentMap.append('x'); //if not visited just return current space
+                    currentMap.append('x'); //if not visited just return x
                 }
             }
             currentMap.append('\n'); // after each row add '\n' to indent down to next col
@@ -131,9 +139,11 @@ public class finderMap {
      * Flood fills the map
      * @param x // x coord
      * @param y // y coord
+     * @param steps // recursing storing of steps from start to end
+     * @param prevCountCurrSum // storage of count sum at previous location
      * @return // t/f is program continues
      */
-    public boolean floodFill(int x, int y, int steps) { //int currCost
+    public boolean floodFill(int x, int y, int steps, int prevCountCurrSum) { //int currCost
         // check if out of bound of our maps
         if (x < 0 || x >= this.map.length || y < 0 || y >= this.map[0].length) {
             return false;
@@ -152,28 +162,66 @@ public class finderMap {
         // mark visited
         setVisited(x, y, steps); 
 
+        //  sets tempCompletedRoute
+        int previousLength = tempCompletedRoute.length(); //    used to remove values with setLength() method
+        tempCompletedRoute.append("(").append(x).append(",").append(y).append(") ");
+        System.out.println(tempCompletedRoute); //  test print route
+
+        //  Checks if program hit end. 
+        if(this.map[x][y] == '!') {
+            System.out.println("Rought Found\nSteps: " + steps + "\n");
+            endX = x; endY = y; //  if we get the end position sets it to endX and endY for later use
+            mapExplored[x][y] = 0; //   Sets end point to 0 instead of step count so it can be used again by different route
+            if(stepsTakenFinal > steps || stepsTakenFinal == 0) {
+                stepsTakenFinal = steps;
+
+            }
+
+            ArrayList<String> route = new ArrayList<>(); // new row
+            route.add(String.valueOf(steps)); //    Steps
+            route.add(tempCompletedRoute.toString()); //    Path
+
+            //  Check if route is lowest cost
+            if (prevCountCurrSum < lowestCost) {
+                lowestCost = prevCountCurrSum;
+                //  Put cheapest route at index 0
+                completedRoutes.add(0, route);
+            } else {
+                //  Add other routes normally
+                completedRoutes.add(route);
+            }
+            System.out.println("Completed Route: " + completedRoutes);
+            
+            return false;
+        }
+
         //  testing getCost
-        System.out.println("Curr Cost at " + x + " : " + y + " = " + getCost(x, y));
+        System.out.println("Curr Cost at pos X: " + x + " Y: " + y + " = " + getCost(x, y));
+
+        // Adds previous count + curr position count and sets it in map to be stored
+        // Using this map for counting cost for final lost cost rought
+        prevCountCurrSum += getCost(x, y);
+        mapStepsCost[x][y] = prevCountCurrSum;
+        System.out.println("Curr sum cost at pos X: " + x + " Y: " + y + " = " + mapStepsCost[x][y] + "\n"); // test count
+
+        
 
         // fill up
-		if(floodFill(x - 1, y, steps + 1)) return true; 
+		if(floodFill(x - 1, y, steps + 1, prevCountCurrSum)) return true; 
 
 		// fill down
-		if(floodFill(x + 1, y, steps + 1)) return true;
+		if(floodFill(x + 1, y, steps + 1, prevCountCurrSum)) return true;
 
 		// fill left
-		if(floodFill(x, y - 1, steps + 1)) return true;
+		if(floodFill(x, y - 1, steps + 1, prevCountCurrSum)) return true;
 
 		// fill right
-		if(floodFill(x, y + 1, steps + 1)) return true;
+		if(floodFill(x, y + 1, steps + 1, prevCountCurrSum)) return true;
 
-        if(this.map[x][y] != '!' && STATE_hitEnd == false) { // We have a bool to check if it hits the end so it doesnt remove anything once at end
+        if(this.map[x][y] != '!') { // use this to check for backtracing
             steps--;
-            this.mapExplored[x][y] = 0; //  This erases any space we backtraced
-        }
-        if(this.map[x][y] == '!') {
-            stepsTakenFinal = steps + 1; 
-            STATE_hitEnd = true;
+            tempCompletedRoute.setLength(previousLength); //    removes last value in string builder
+            return false;
         }
 
         return false;
@@ -201,7 +249,7 @@ public class finderMap {
             if (this.map[row][col] == '#') {
 
                 //  will call floodFill and start there
-                floodFill(row, col, 0);
+                floodFill(row, col, 0, 0);
                 System.out.println("STEPS TAKEN: " + stepsTakenFinal + "\n");
                 //  Stop search after finding start
                 return;
@@ -237,14 +285,11 @@ public class finderMap {
          
         finderMap testMap = new finderMap(maze.toString());
 
-        //  print original map
-        System.out.println("\nUnsolved Map:");
-        System.out.println(testMap.getString());
-
         //  Helper func which finds '#' to start program
         testMap.mapTraversal(); //---------------------------WHERE PROGRAM BEGINS REALLY--------------------
         System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
+        
 
     }
 }
