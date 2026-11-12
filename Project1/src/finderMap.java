@@ -1,4 +1,4 @@
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import java.io.File;                  // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
@@ -15,13 +15,16 @@ import java.util.Scanner;             // Import the Scanner class to read text f
  * @author Tess Ramsey (Documentation)
  * @version 1.0
  */
+
 public class finderMap {
    
     private char[][] map; //    This is what the map looks like with start, end, walls, unexplored
     private int [][] mapExplored; //    This is a new map keeping track where we have explored
     private int [][] mapStepsCost; //   Going to keep track of of our step cost in this map so algorithim doesnt need to change much.
     int endX, endY; //  Small helper for getString so we can set ! position to stepsTakenFinal (thus setting end to smallest rought count)
-    private StringBuilder completedRoute = new StringBuilder(); //   Collection of each way to finish maze [route][x pos][y pos]
+    private ArrayList<ArrayList<String>> completedRoutes = new ArrayList<>(); //   Collection of each way to finish maze [route][x pos][y pos]
+    private int lowestCost = Integer.MAX_VALUE; 
+    private int lowestCostRouteIndex = -1; // Going to place lowest step total into front of array list
     private StringBuilder tempCompletedRoute = new StringBuilder(); // holds currently being worked on route that will have values being removed and added
     int stepsTakenFinal = 0; // count of steps taken to get to end
     
@@ -41,6 +44,7 @@ public class finderMap {
         this.map = new char[rows.length][rows[0].length()];
         this.mapExplored = new int[rows.length][rows[0].length()];
         this.mapStepsCost = new int[rows.length][rows[0].length()];
+        
         
         
 
@@ -167,14 +171,28 @@ public class finderMap {
         //  Checks if program hit end. 
         if(this.map[x][y] == '!') {
             System.out.println("Rought Found\nSteps: " + steps + "\n");
-            endX = x; endY = y;
-            mapExplored[x][y] = 0;
+            endX = x; endY = y; //  if we get the end position sets it to endX and endY for later use
+            mapExplored[x][y] = 0; //   Sets end point to 0 instead of step count so it can be used again by different route
             if(stepsTakenFinal > steps || stepsTakenFinal == 0) {
                 stepsTakenFinal = steps;
+
             }
-            completedRoute.append( "Steps: " + steps + " [" + tempCompletedRoute + "] ");
-            System.out.println("Completed Route: " + completedRoute);
-            //TODO this is where I will add final count to end.
+
+            ArrayList<String> route = new ArrayList<>(); // new row
+            route.add(String.valueOf(steps)); //    Steps
+            route.add(tempCompletedRoute.toString()); //    Path
+
+            //  Check if route is lowest cost
+            if (prevCountCurrSum < lowestCost) {
+                lowestCost = prevCountCurrSum;
+                //  Put cheapest route at index 0
+                completedRoutes.add(0, route);
+            } else {
+                //  Add other routes normally
+                completedRoutes.add(route);
+            }
+            System.out.println("Completed Route: " + completedRoutes);
+            
             return false;
         }
 
