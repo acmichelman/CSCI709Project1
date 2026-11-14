@@ -3,3 +3,6 @@ W3Schools. (n.d.). Java String split() method. https://www.w3schools.com/java/re
 W3Schools. (n.d.). Java read files. https://www.w3schools.com/java/java_files_read.asp
 
 https://www.geeksforgeeks.org/java/stringbuilder-setlength-in-java-with-examples/
+
+https://github.com/jjenkov/javafx-examples/blob/main/src/main/java/com/jenkov/javafx/button/ButtonExample.java
+

@@ -1,14 +1,12 @@
 import java.util.ArrayList;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+
 
 import java.io.File;                  // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 import java.util.Scanner;             // Import the Scanner class to read text files
+
+import javafx.application.Application;
 
 /**
  * Goal Set 1: Build the data structure
@@ -120,6 +118,7 @@ public class finderMap {
     /**
      * Gets current state of our map, marking off visited locations as 'v'
      * @return // a string representing the values in our current map
+     * currentMap is what gets displayed once the program has finished (ex, the finished maze)
      */
     public String getString() {
         
@@ -264,6 +263,21 @@ public class finderMap {
         }
     }
 
+    //  get width of maze for gui
+    public int getBoxWidth() {
+        return this.map[0].length;
+    }
+
+    //  get height of amze for gui
+    public int getBoxHeight() {
+        return this.map.length;
+    }
+
+    //  get a position for our gui
+    public char getPosGui(int row, int col) {
+        return this.map[row][col];
+    }
+
     /**
      * Main method currently used for testing map data
      * @param args
@@ -297,8 +311,12 @@ public class finderMap {
         System.out.println(testMap.getString());
 
         //  -----------------------JAVA FX BEGIN--------------------------------
-        Scene scene = new Scene(new StackPane(), 400, 300);
+        
+        //  Pass the original maze object into the GUI
+        mapGUI.setMap(testMap);
 
+        //  Launch JavaFX
+        Application.launch(mapGUI.class, args);
         
         
 
