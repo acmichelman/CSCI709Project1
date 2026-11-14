@@ -1,5 +1,11 @@
 import java.util.ArrayList;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
 import java.io.File;                  // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 import java.util.Scanner;             // Import the Scanner class to read text files
@@ -265,7 +271,7 @@ public class finderMap {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("datafile.txt");
+        File myObj = new File("Project1/src/datafile.txt");
         StringBuilder maze = new StringBuilder();
 
         // try-with-resources: Scanner will be closed automatically
@@ -289,6 +295,11 @@ public class finderMap {
         testMap.mapTraversal(); //---------------------------WHERE PROGRAM BEGINS REALLY--------------------
         System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
+
+        //  -----------------------JAVA FX BEGIN--------------------------------
+        Scene scene = new Scene(new StackPane(), 400, 300);
+
+        
         
 
     }
