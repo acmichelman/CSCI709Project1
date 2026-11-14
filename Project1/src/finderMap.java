@@ -1,8 +1,12 @@
 import java.util.ArrayList;
 
+
+
 import java.io.File;                  // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 import java.util.Scanner;             // Import the Scanner class to read text files
+
+import javafx.application.Application;
 
 /**
  * Goal Set 1: Build the data structure
@@ -114,6 +118,7 @@ public class finderMap {
     /**
      * Gets current state of our map, marking off visited locations as 'v'
      * @return // a string representing the values in our current map
+     * currentMap is what gets displayed once the program has finished (ex, the finished maze)
      */
     public String getString() {
         
@@ -258,6 +263,26 @@ public class finderMap {
         }
     }
 
+    //  get width of maze for gui
+    public int getBoxWidth() {
+        return this.map[0].length;
+    }
+
+    //  get height of amze for gui
+    public int getBoxHeight() {
+        return this.map.length;
+    }
+
+    //  get a position for our gui
+    public char getPosGui(int row, int col) {
+        return this.map[row][col];
+    }
+
+    //  passes the completedRoughtes which is the positions (x,y cords) of a path to get from start to end
+    public ArrayList<ArrayList<String>> getCompletedRoutes() {
+        return this.completedRoutes;
+    }
+
     /**
      * Main method currently used for testing map data
      * @param args
@@ -265,7 +290,7 @@ public class finderMap {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("datafile.txt");
+        File myObj = new File("Project1/src/datafile.txt");
         StringBuilder maze = new StringBuilder();
 
         // try-with-resources: Scanner will be closed automatically
@@ -289,6 +314,15 @@ public class finderMap {
         testMap.mapTraversal(); //---------------------------WHERE PROGRAM BEGINS REALLY--------------------
         System.out.println("Flood-filled Map:");
         System.out.println(testMap.getString());
+
+        //  -----------------------JAVA FX BEGIN--------------------------------
+        
+        //  Pass the original maze object into the GUI
+        mapGUI.setMap(testMap);
+
+        //  Launch JavaFX
+        Application.launch(mapGUI.class, args);
+        
         
 
     }
