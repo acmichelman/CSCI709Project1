@@ -278,6 +278,11 @@ public class finderMap {
         return this.map[row][col];
     }
 
+    //  passes the completedRoughtes which is the positions (x,y cords) of a path to get from start to end
+    public ArrayList<ArrayList<String>> getCompletedRoutes() {
+        return this.completedRoutes;
+    }
+
     /**
      * Main method currently used for testing map data
      * @param args
