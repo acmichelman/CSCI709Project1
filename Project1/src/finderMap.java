@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
-import java.io.File;                  // Import the File class
-import java.io.FileNotFoundException; // Import this class to handle errors
+import java.io.InputStream;
 import java.util.Scanner;             // Import the Scanner class to read text files
 
 /**
@@ -265,24 +264,22 @@ public class finderMap {
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
-        File myObj = new File("datafile.txt");
         StringBuilder maze = new StringBuilder();
+        // Read datafile.txt from inside the JAR
+        InputStream input = finderMap.class.getResourceAsStream("/datafile.txt");
 
-        // try-with-resources: Scanner will be closed automatically
-        try (Scanner myReader = new Scanner(myObj)) {
-        while (myReader.hasNextLine()) {
-            String data = myReader.nextLine();
-            System.out.println(data);
-            
-            //  this will add a /n after each line read in .txt file  
-            maze.append(data);
-            maze.append("\n");
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+        if (input == null) {
+            System.out.println("ERROR: datafile.txt not found inside JAR.");
+            return;
         }
-         
+
+        try (Scanner myReader = new Scanner(input)) {
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                maze.append(data).append("\n");
+            }
+        }
+            
         finderMap testMap = new finderMap(maze.toString());
 
         //  Helper func which finds '#' to start program
