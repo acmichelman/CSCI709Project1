@@ -22,3 +22,10 @@ The `JAVA PROJECTS` view allows you to manage your dependencies. More details ca
 1) cd .\Project1\src
 2) javac finderMap.java
 3) java finderMap
+
+or 
+
+1) javac --add-modules javafx.controls -d bin .\Project1\src\*.java
+2) jar --create --file prjAtestGoal5.jar --main-class finderMap -C bin .
+3) java --add-modules javafx.controls -jar prjAtestGoal5.jar
+

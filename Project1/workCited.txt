@@ -4,8 +4,8 @@ W3Schools. (n.d.). Java read files. https://www.w3schools.com/java/java_files_re
 
 https://www.geeksforgeeks.org/java/stringbuilder-setlength-in-java-with-examples/
 
-https://github.com/jjenkov/javafx-examples#javafx-basic-examples
+Jenkov, J. (n.d.-a). AnimationExample.java [Source code]. GitHub. https://github.com/jjenkov/javafx-examples/blob/main/src/main/java/com/jenkov/javafx/animation/AnimationExample.java
 
-https://github.com/jjenkov/javafx-examples/blob/main/src/main/java/com/jenkov/javafx/button/ButtonExample.java
+Jenkov, J. (n.d.-b). ButtonExample.java [Source code]. GitHub. https://github.com/jjenkov/javafx-examples/blob/main/src/main/java/com/jenkov/javafx/button/ButtonExample.java
 
-https://github.com/jjenkov/javafx-examples/blob/main/src/main/java/com/jenkov/javafx/animation/AnimationExample.java
+Jenkov, J. (n.d.-c). JavaFX examples [Source code]. GitHub. https://github.com/jjenkov/javafx-examples#javafx-basic-examples
