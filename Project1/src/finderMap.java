@@ -9,17 +9,14 @@ import java.util.Scanner;             // Import the Scanner class to read text f
 import javafx.application.Application;
 
 /**
- * Goal Set 1: Build the data structure
- * This program takes a string of chars representing a map and creates two 2D-arrays
- * One to store the paths, walls, start, and end (what can be visited)
- * Another to store wether or not a location has been visited
- * finderMap
- * 
- * @author Alex Michelman (Code)
- * @author Tess Ramsey (Documentation)
- * @version 1.0
+ * Project A: Recursive Wayfinding
+ * Solves a Maze with flood fill, backtracking, and brute-force optimization
+ * Displays results in a GUI, built using JavaFX
+ * finderMap is a 2D grid maze solver
+ * @author Alex Michelman
+ * @author Tess Ramsey
+ * @version 5.0
  */
-
 public class finderMap {
    
     private char[][] map; //    This is what the map looks like with start, end, walls, unexplored
@@ -33,8 +30,8 @@ public class finderMap {
     
 
     /**
-     * Constructor (takes a inputed string and maps it to a 2d array)
-     * @param map // string of chars representing a grid, each row ends in \n
+     * Constructor (takes a string and stores it as a 2d array)
+     * @param map string of chars representing a grid, each row ends in \n
      */
     public finderMap(String map) {
         //  First scrub the input so all lower and no spaces
@@ -76,9 +73,9 @@ public class finderMap {
 
     /**
      * Checks if (x, y) coord is a path or not
-     * @param x // x coord
-     * @param y // y coord
-     * @return // true if path
+     * @param x x coord
+     * @param y y coord
+     * @return true if path
      */
     public boolean getPath(int x, int y) {
         // "x" is a wall
@@ -90,21 +87,21 @@ public class finderMap {
     }
 
     /**
-     * Checks if an (x, y) coord has been visisted
-     * @param x // x coord
-     * @param y // y coord
-     * @return // true if visited
+     * Checks if an (x, y) coord has been visited
+     * @param x x coord
+     * @param y y coord
+     * @return step count stored in mapExplored, or 0 if unvisited
      */
     public int getVisited(int x, int y) { 
         return this.mapExplored[x][y];
     }
 
     /**
-     * Sets (x, y) coord of mapExplored to true when visited
-     * @param x // x coord
-     * @param y // y coord
-     * @param visitedNum // what step your at in your travle ()
-     * @return // true if has be visited
+     * Stores visitedNum + 1 in an integer array, mapExplored
+     * @param x x coord
+     * @param y y coord
+     * @param visitedNum what step your at in your travel
+     * @return true if the tile is a valid path and was successfully marked
      */
     public boolean setVisited(int x, int y, int visitedNum) { 
         if(getPath(x, y) == true){
@@ -116,9 +113,11 @@ public class finderMap {
     }
 
     /**
-     * Gets current state of our map, marking off visited locations as 'v'
-     * @return // a string representing the values in our current map
+     * Appends integer step counts (mapExplored[row][col]) 
+     * and marks unvisited tiles as 'x'
      * currentMap is what gets displayed once the program has finished (ex, the finished maze)
+     * @return a string representing the values in our current map
+     *
      */
     public String getString() {
         
@@ -142,11 +141,11 @@ public class finderMap {
 
     /**
      * Flood fills the map
-     * @param x // x coord
-     * @param y // y coord
-     * @param steps // recursing storing of steps from start to end
-     * @param prevCountCurrSum // storage of count sum at previous location
-     * @return // t/f is program continues
+     * @param x x coord
+     * @param y y coord
+     * @param steps recursing storing of steps from start to end
+     * @param prevCountCurrSum storage of count sum at previous location
+     * @return true if a target condition triggers early termination, false otherwise
      */
     public boolean floodFill(int x, int y, int steps, int prevCountCurrSum) { //int currCost
         // check if out of bound of our maps
@@ -204,7 +203,7 @@ public class finderMap {
         System.out.println("Curr Cost at pos X: " + x + " Y: " + y + " = " + getCost(x, y));
 
         // Adds previous count + curr position count and sets it in map to be stored
-        // Using this map for counting cost for final lost cost rought
+        // Using this map for counting cost for final lowest cost route
         prevCountCurrSum += getCost(x, y);
         mapStepsCost[x][y] = prevCountCurrSum;
         System.out.println("Curr sum cost at pos X: " + x + " Y: " + y + " = " + mapStepsCost[x][y] + "\n"); // test count
@@ -233,10 +232,10 @@ public class finderMap {
     }
 
     /**
-     * Gets cost in space the map
-     * @param x // x coord
-     * @param y // y coord
-     * @return // cost at current x, y cord
+     * Gets cost in space on the map
+     * @param x x coord
+     * @param y y coord
+     * @return cost at current x, y coord
      */
     public int getCost(int x, int y) {
         if(this.map[x][y] == '!' || this.map[x][y] == '#') {
@@ -247,7 +246,10 @@ public class finderMap {
         return cost;
     }
 
-    //  Small helper method which will find '#' in dataFile.txt and set that as our starting point
+    /**
+     * Helper method, finds '#' in dataFile.txt
+     * runs floodFill from '#', as our starting point
+     */
     public void mapTraversal() {
     for (int row = 0; row < this.map.length; row++) {
         for (int col = 0; col < this.map[row].length; col++) {
@@ -263,30 +265,46 @@ public class finderMap {
         }
     }
 
-    //  get width of maze for gui
+    /**
+     * get width of map in columns
+     * @return number of columns
+     */
     public int getBoxWidth() {
         return this.map[0].length;
     }
 
-    //  get height of amze for gui
+    /**
+     * get height of map in rows
+     * @return number of rows
+     */
     public int getBoxHeight() {
         return this.map.length;
     }
 
-    //  get a position for our gui
+    /**
+     * get a position (coords of tile), used for our gui
+     * @param row y coord of grid
+     * @param col x coord of grid
+     * @return char tile value at row, col of map
+     */
     public char getPosGui(int row, int col) {
         return this.map[row][col];
     }
 
-    //  passes the completedRoughtes which is the positions (x,y cords) of a path to get from start to end
+    /**
+     * passes the completedRoutes, which is the positions (x,y coords) of a path
+     * to get from start to end
+     * @return a list of completed routes, with the lowest-cost route at index 0
+     */
     public ArrayList<ArrayList<String>> getCompletedRoutes() {
         return this.completedRoutes;
     }
 
     /**
-     * Main method currently used for testing map data
-     * @param args
-     * @throws Exception
+     * Main method reads map data from txt file, determines best path,
+     * and displays it with Java FX
+     * @param args command line args
+     * @throws Exception if an error occurs while reading the file or launching JavaFX
      */
     public static void main(String[] args) throws Exception {
         System.out.println("Working directory: " + System.getProperty("user.dir"));
