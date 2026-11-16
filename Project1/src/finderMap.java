@@ -25,6 +25,8 @@ public class finderMap {
     private int lowestCost = Integer.MAX_VALUE; //  used as a comparason to set lowest cost path to first position in completedRoutes
     private StringBuilder tempCompletedRoute = new StringBuilder(); // holds currently being worked on route that will have values being removed and added
     int stepsTakenFinal = 0; // count of steps taken to get to end
+    private ArrayList<int[]> visitOrder = new ArrayList<>(); // to record a timeline of map traversal
+    private int bestRouteEnd = 0;   // how many visitOrder entries to replay
     
 
     /**
@@ -64,7 +66,6 @@ public class finderMap {
             for(int col = 0; col < rows[0].length(); col++) {
                 char curr = rows[row].charAt(col);
                 this.map[row][col] = curr;
-                    
             } 
         }
     }
@@ -104,8 +105,10 @@ public class finderMap {
     public boolean setVisited(int x, int y, int visitedNum) { 
         if(getPath(x, y) == true){
             this.mapExplored[x][y] = visitedNum + 1;
+            // mapGUI.update();
             return true;
         } else {
+            // mapGUI.update();
             return false;
         }
     }
@@ -138,6 +141,22 @@ public class finderMap {
     }
 
     /**
+     * Getter for visitOrder
+     * @return visitOrder ArrayList
+     */
+    public ArrayList<int[]> getVisitOrder() {
+        return visitOrder;
+    }
+
+    /**
+     * Getter for bestRouteEnd
+     * @return int value of visitOrder.size()
+     */
+    public int getBestRouteEnd() {
+    return bestRouteEnd;
+    }
+
+    /**
      * Flood fills the map
      * @param x x coord
      * @param y y coord
@@ -163,6 +182,7 @@ public class finderMap {
 
         // mark visited
         setVisited(x, y, steps); 
+        visitOrder.add(new int[]{x, y, 1});
 
         //  sets tempCompletedRoute
         int previousLength = tempCompletedRoute.length(); //    used to remove values with setLength() method
@@ -186,6 +206,7 @@ public class finderMap {
             //  Check if route is lowest cost
             if (prevCountCurrSum < lowestCost) {
                 lowestCost = prevCountCurrSum;
+                bestRouteEnd = visitOrder.size();   // ends visitOrder once best route end found
                 //  Put cheapest route at index 0
                 completedRoutes.add(0, route);
             } else {
@@ -206,8 +227,6 @@ public class finderMap {
         mapStepsCost[x][y] = prevCountCurrSum;
         System.out.println("Curr sum cost at pos X: " + x + " Y: " + y + " = " + mapStepsCost[x][y] + "\n"); // test count
 
-        
-
         // fill up
 		if(floodFill(x - 1, y, steps + 1, prevCountCurrSum)) return true; 
 
@@ -223,6 +242,7 @@ public class finderMap {
         if(this.map[x][y] != '!') { // use this to check for backtracing
             steps--;
             tempCompletedRoute.setLength(previousLength); //    removes last value in string builder
+            visitOrder.add(new int[]{x, y, 0});   // backtrack visit order, reset third value to 0
             return false;
         }
 
@@ -249,15 +269,15 @@ public class finderMap {
      * runs floodFill from '#', as our starting point
      */
     public void mapTraversal() {
-    for (int row = 0; row < this.map.length; row++) {
-        for (int col = 0; col < this.map[row].length; col++) {
-            if (this.map[row][col] == '#') {
+        for (int row = 0; row < this.map.length; row++) {
+            for (int col = 0; col < this.map[row].length; col++) {
+                if (this.map[row][col] == '#') {
 
-                //  will call floodFill and start there
-                floodFill(row, col, 0, 0);
-                System.out.println("STEPS TAKEN: " + stepsTakenFinal + "\n");
-                //  Stop search after finding start
-                return;
+                    //  will call floodFill and start there
+                    floodFill(row, col, 0, 0);
+                    System.out.println("STEPS TAKEN: " + stepsTakenFinal + "\n");
+                    //  Stop search after finding start
+                    return;
                 }
             }
         }
@@ -322,23 +342,19 @@ public class finderMap {
             }
         }
 
-         
-        finderMap testMap = new finderMap(maze.toString());
+        // setup map
+        finderMap map = new finderMap(maze.toString());
 
         //  Helper func which finds '#' to start program
-        testMap.mapTraversal(); //---------------------------WHERE PROGRAM BEGINS REALLY--------------------
-        System.out.println("Flood-filled Map:");
-        System.out.println(testMap.getString());
+        map.mapTraversal();
 
-        //  -----------------------JAVA FX BEGIN--------------------------------
-        
         //  Pass the original maze object into the GUI
-        mapGUI.setMap(testMap);
+        mapGUI.setMap(map);
 
         //  Launch JavaFX
         Application.launch(mapGUI.class, args);
-        
-        
 
+        System.out.println("Flood-filled Map:");
+        System.out.println(map.getString());
     }
 }
